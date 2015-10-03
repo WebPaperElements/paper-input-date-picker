@@ -7,7 +7,11 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
+
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -27,24 +31,11 @@ Example:
     <style>
       :host {
         display: block;
-        box-sizing: border-box;
-      }
-  
-      .author img {
-        display: block;
-        float: left;
-        margin-right: 5px;
-        max-height: 100px;
-        max-width: 100px;
       }
     </style>
-    <h1>&lt;paper-input-date-picker&gt;</h1>
-    <content></content>
-    <p class="author">
-      <img src="{{author.image}}">
-      Cheers,<br/>
-      <span class="name">{{author.name}}</span>
-    </p>
+    <paper-input label="total">
+      <paper-icon-button suffix icon="today"></paper-icon-button>
+    </paper-input>
   </template>
 
 </dom-module>
