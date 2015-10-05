@@ -1,18 +1,22 @@
 {
   "name": "paper-input-date-picker",
-  "version": "1.0.3",
+  "version": "0.10.1",
   "authors": [
-    "Anonymous <anonymous@example.com>"
+    "Vinicius Patrinhani <patrinhani@ciandt.com>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "An input date picker element based on Polymer 1.0, Paper Elements and Material Design guidelines.",
   "keywords": [
     "web-component",
     "polymer",
-    "seed"
+    "paper",
+    "material",
+    "forms",
+    "input",
+    "datepicker"
   ],
   "main": "paper-input-date-picker.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "homepage": "http://webpaperelements.github.io/paper-input-date-picker/",
   "ignore": [
     "/.*",
     "/test/"
