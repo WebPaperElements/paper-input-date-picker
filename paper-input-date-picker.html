@@ -9,9 +9,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../iron-behaviors/iron-button-state.html">
+<link rel="import" href="../iron-behaviors/iron-control-state.html">
+
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-date-picker/paper-date-picker.html">
+
+<script src="../moment/min/moment-with-locales.min.js"></script>
 
 <!--
 An element providing a solution to no problem in particular.
@@ -32,10 +41,54 @@ Example:
       :host {
         display: block;
       }
+      
+      :host > paper-button {
+        padding: 0px;
+        margin: 0px;
+        text-transform: none;
+        text-align: left;
+      }
+      
+      paper-button.btn-clear {
+        color: var(--paper-red-500);
+        --paper-button-flat-focus-color: var(--paper-red-50);
+      }
+      
+      paper-button.btn-clear:hover {
+        background: var(--paper-red-50);
+      }
     </style>
-    <paper-input label="total">
-      <paper-icon-button suffix icon="today"></paper-icon-button>
-    </paper-input>
+    
+    <paper-button  on-tap="showDialog"
+      focus-target="[[_dropdownContent]]">
+      <paper-input id="input"
+        disabled="[[disabled]]"
+        value="[[dateInputText]]"
+        placeholder="[[placeholder]]"
+        always-float-label="[[alwaysFloatLabel]]"
+        no-label-float="[[noLabelFloat]]"
+        auto-validate$="[[autoValidate]]"
+        autocomplete$="[[autocomplete]]"
+        autofocus$="[[autofocus]]"
+        inputmode$="[[inputmode]]"
+        name$="[[name]]"
+        required$="[[required]]"
+        maxlength$="[[maxlength]]"
+        autocapitalize$="[[autocapitalize]]"
+        error-message="[[errorMessage]]"
+        label="[[label]]">
+        <iron-icon icon="today" prefix></iron-icon>
+        <iron-icon icon="arrow-drop-down" suffix></iron-icon>
+      </paper-input>
+    </paper-button>
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+      <paper-date-picker id="picker" locale="{{locale}}"></paper-date-picker>
+      <div class="buttons">
+        <paper-button dialog-confirm on-tap="onTapClearValue" class="btn-clear">Clear</paper-button>
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>OK</paper-button>
+      </div>
+    </paper-dialog>
   </template>
 
 </dom-module>
@@ -45,40 +98,79 @@ Example:
   Polymer({
 
     is: 'paper-input-date-picker',
+    
+    behaviors: [
+      Polymer.IronFormElementBehavior,
+      Polymer.PaperInputBehavior,
+      Polymer.IronControlState,
+      Polymer.IronButtonState,
+      Polymer.IronA11yKeysBehavior
+    ],
 
     properties: {
-
+      
       /**
-       * `fancy` indicates that the element should don a monocle and tophat,
-       * while checking its pocket watch.
-       */
-      fancy: Boolean,
-
+        * The label for the dropdown.
+        */
+      label: {
+        type: String
+      },
       /**
-       * Describes the author of the element, but is really just an excuse to
-       * show off JSDoc annotations.
-       *
-       * @type {{name: string, image: string}}
-       */
-      author: {
-        type: Object,
-        // Use `value` to provide a default value for a property, by setting it
-        // on your element's prototype.
-        //
-        // If you provide a function, as we do here, Polymer will call that
-        // _per element instance_.
-        //
-        // We do that to ensure that each element gets its own copy of the
-        // value, rather than having it shared across all instances (via the
-        // prototype).
-        value: function() {
-          return {
-            name:  'Dimitri Glazkov',
-            image: 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg',
-          };
-        }
+        * The placeholder for the dropdown.
+        */
+      placeholder: {
+        type: String
       },
 
+      /**
+        * Set to true to disable the floating label. Bind this to the
+        * `<paper-input-container>`'s `noLabelFloat` property.
+        */
+      noLabelFloat: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+      },
+      /**
+        * Set to true to always float the label. Bind this to the
+        * `<paper-input-container>`'s `alwaysFloatLabel` property.
+        */
+      alwaysFloatLabel: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Format date to be displayed on input.
+       */
+      dateFormat: {
+        type: String,
+      },
+      
+      /**
+       * For localization formatting.
+       */
+      locale: {
+        type: String
+      },
+
+      /**
+        * The derived "label" of the currently selected item. This value
+        * is the `label` property on the selected item if set, or else the
+        * trimmed text content of the selected item.
+        */
+      dateInputText: {
+        type: String,
+        notify: true,
+        computed: '_computeInputText(value)'
+      },
+      
+      keyEventTarget: {
+        type: Object,
+        value: function() {
+          return this;
+        }
+      },
     },
 
     // Element Lifecycle
@@ -90,6 +182,24 @@ Example:
       //
       // This is the point where you should make modifications to the DOM (when
       // necessary), or kick off any processes the element wants to perform.
+      var $this = this;
+      
+      this.locale = window.navigator.userLanguage || window.navigator.language;
+      
+      this.addEventListener("focus", function () {
+        
+        $this.$.input.readonly = true;
+        $this.$.input.focus();
+      }, true);
+      
+      this.addEventListener("blur", function () {
+
+        $this.$.input.readonly = false;
+      }, true);
+      
+      this._inputElement = this.$.input;
+      
+      this.dateFormat = this.$.picker.dateFormat;
     },
 
     attached: function() {
@@ -109,34 +219,56 @@ Example:
     },
 
     // Element Behavior
-
-    /**
-     * The `paper-input-date-picker-lasers` event is fired whenever `fireLasers` is called.
-     *
-     * @event paper-input-date-picker-lasers
-     * @detail {{sound: String}}
-     */
-
-    /**
-     * Sometimes it's just nice to say hi.
-     *
-     * @param {string} greeting A positive greeting.
-     * @return {string} The full greeting.
-     */
-    sayHello: function(greeting) {
-      var response = greeting || 'Hello World!';
-      return 'paper-input-date-picker says, ' + response;
+    keyBindings: {
+      'del': '_delPressed'
+    },
+    
+    _delPressed: function(event) {
+      
+      this._clearValue();
     },
 
+    _clearValue: function() {
+      
+      this.value = '';
+    },
+    
     /**
-     * Attempt to destroy this element's enemies with a beam of light!
-     *
-     * Or, at least, dispatch an event in the vain hope that someone else will
-     * do the zapping.
-     */
-    fireLasers: function() {
-      this.fire('paper-input-date-picker-lasers', {sound: 'Pew pew!'});
-    }
+      * Compute the text for the input given a selected date.
+      *
+      * @param {Object} value A selected date from picker dialog.
+      */
+    _computeInputText: function(value) {
+      if (!value) {
+        return '';
+      }
+
+      return this.dateFormat(value, 'LL');
+    },
+
+    dismissDialog: function(event) {
+      
+      var $this = this;
+      
+      if (event.detail.confirmed) {
+      
+        this.value = this.$.picker.date;
+      }
+      
+      this.focus();
+    },
+    
+    showDialog: function() {
+      
+      this.focus();
+      this.$.picker.date = this.value;
+      this.$.dialog.toggle();
+    },
+    
+    onTapClearValue: function () {
+      
+      this.$.picker.date = null;
+    },
 
   });
 

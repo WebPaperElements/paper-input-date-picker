@@ -20,29 +20,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <p>An example of <code>&lt;paper-input-date-picker&gt;</code>:</p>
 
-    <p>Make words! <button id="saybtn">Say Something</button></p>
-    <p>Make lasers! <button id="laserbtn">Fire lasers</button></p>
+    <p>An baic example of <code>&lt;paper-input-date-picker&gt;</code>:</p>
+    <paper-input-date-picker label="Pick a date..."></paper-input-date-picker>
 
-    <paper-input-date-picker author='{"name": "Lord Meowser", "image": "http://placekitten.com/g/200/300"}' fancy>
-      <h2>Hello paper-input-date-picker</h2>
-    </paper-input-date-picker>
+    <p>An example of <code>&lt;paper-input-date-picker&gt;</code> with validaton messages:</p>
+    <paper-input-date-picker label="Pick a date..." required auto-validate error-message="needs some date!"></paper-input-date-picker>
 
     <script>
-      var seedElement = document.querySelector('paper-input-date-picker');
-      
-      document.querySelector('#saybtn').addEventListener('click', function() {
-        alert(seedElement.sayHello('Hallo!'));
-      });
-      
-      document.querySelector('#laserbtn').addEventListener('click', function() {
-        seedElement.fireLasers();
-      });
-      
-      document.addEventListener("paper-input-date-picker-lasers", function(e) {
-        console.log(e.detail.sound);
-      });
-      
     </script>
-
   </body>
 </html>
