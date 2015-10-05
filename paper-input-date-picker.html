@@ -45,8 +45,14 @@ Example:
       :host > paper-button {
         padding: 0px;
         margin: 0px;
+        width: inherit;
+        height: inherit;
         text-transform: none;
         text-align: left;
+      }
+
+      :host > paper-button::shadow > paper-material {
+        padding: 0px;
       }
       
       paper-button.btn-clear {
@@ -77,7 +83,7 @@ Example:
         autocapitalize$="[[autocapitalize]]"
         error-message="[[errorMessage]]"
         label="[[label]]">
-        <iron-icon icon="today" prefix></iron-icon>
+        <iron-icon icon="[[prefixIcon]]" hidden="[[noPrefixIcon]]" prefix></iron-icon>
         <iron-icon icon="arrow-drop-down" suffix></iron-icon>
       </paper-input>
     </paper-button>
@@ -115,11 +121,26 @@ Example:
       label: {
         type: String
       },
+      
       /**
         * The placeholder for the dropdown.
         */
       placeholder: {
         type: String
+      },
+
+      noPrefixIcon: {
+        
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
+      prefixIcon: {
+        
+        type: String,
+        value: 'today',
+        reflectToAttribute: true
       },
 
       /**
