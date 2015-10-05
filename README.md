@@ -1,7 +1,6 @@
 # paper-input-date-picker
 
-An element providing a starting point for your own reusable Polymer elements.
-
+An input date picker element based on Polymer 1.0, Paper Elements and Material Design guidelines.
 
 ## Dependencies
 
