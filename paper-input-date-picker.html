@@ -102,7 +102,7 @@ Example:
         <iron-icon icon="arrow-drop-down" suffix></iron-icon>
       </paper-input>
     </paper-button>
-    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissDialog">
+    <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="[[modal]]" on-iron-overlay-closed="dismissDialog">
       <paper-date-picker id="picker" locale="{{locale}}"></paper-date-picker>
       <div class="buttons">
         <paper-button dialog-confirm on-tap="onTapClearValue" class="btn-clear">Clear</paper-button>
