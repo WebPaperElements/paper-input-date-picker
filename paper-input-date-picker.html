@@ -64,7 +64,7 @@ Example:
         background: var(--paper-red-50);
       }
     </style>
-    
+
     <paper-button  on-tap="showDialog"
       focus-target="[[_dropdownContent]]">
       <paper-input id="input"
@@ -222,16 +222,14 @@ Example:
       
       this.locale = window.navigator.userLanguage || window.navigator.language;
       
-      this.addEventListener("focus", function () {
-        
+      /*this.addEventListener("focus", function () {
         $this.$.input.readonly = true;
         $this.$.input.focus();
       }, true);
       
       this.addEventListener("blur", function () {
-
         $this.$.input.readonly = false;
-      }, true);
+      }, true);*/
       
       this._inputElement = this.$.input;
       
@@ -279,7 +277,16 @@ Example:
         return '';
       }
 
-      return this.dateFormat(value, 'LL');
+      return this._dateFormat(value, 'LL', this.locale);
+    },
+
+    _dateFormat: function(date, format, locale) {
+      if (!date) {
+        return '';
+      }
+      var value = moment(date);
+      value.locale(locale || this.locale);
+      return value.format(format);
     },
 
     dismissDialog: function(event) {
