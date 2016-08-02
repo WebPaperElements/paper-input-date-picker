@@ -38,21 +38,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
       <p>An example of <code>&lt;paper-input-date-picker&gt;</code> with validaton messages:</p>
       <paper-input-date-picker id="dynInputDate" label="Pick a date..."></paper-input-date-picker>
+
+      <paper-button on-tap="onClickDynSetMinDate" auto-validate>Set Min Date</paper-button>
+
+      <paper-button on-tap="onClickDynSetMaxDate" auto-validate>Set Max Date</paper-button>
       
-      <paper-button label="Teste" on-tap="onClickDynValidation" auto-validate>Validate</paper-button>
+      <paper-button on-tap="onClickDynValidation" auto-validate>Validate</paper-button>
   
       <script>
         
         window.addEventListener('WebComponentsReady', function() {
           
           var app = document.querySelector('#app');
+
+          app.onClickDynSetMinDate = function () {
+            var numberDaysBeforeToday = 10;
+            var daysToTimestampCalcFactor = 24 * 60 * 60 * 1000;
+
+            // Subtract some days from today.
+            var timestampDaysToSubtract = (numberDaysBeforeToday * daysToTimestampCalcFactor);
+            var minDate = new Date((new Date()).valueOf() - timestampDaysToSubtract)
+
+            this.$.dynInputDate.minDate = minDate;
+          };
           
+          app.onClickDynSetMaxDate = function () {
+            var numberDaysAfterToday = 10;
+            var daysToTimestampCalcFactor = 24 * 60 * 60 * 1000;
+
+            // Add some days from today.
+            var timestampDaysToAdd = (numberDaysAfterToday * daysToTimestampCalcFactor);
+            var maxDate = new Date((new Date()).valueOf() + timestampDaysToAdd)
+
+            this.$.dynInputDate.maxDate = maxDate;
+          };
+
           app.onClickDynValidation = function () {
             
             this.$.dynInputDate.errorMessage = 'Errooooooo';
             this.$.dynInputDate.setAttribute('invalid', 'true');
-            
-            console.log('ssdsas', this.$.dynInputDate.value);
           };
         });
       </script>

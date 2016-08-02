@@ -110,7 +110,7 @@ Example:
       </paper-input>
     </paper-button>
     <paper-dialog id="dialog" class="paper-date-picker-dialog" modal="[[modal]]" on-iron-overlay-closed="_dismissDialog">
-      <paper-date-picker id="picker" locale="{{locale}}"></paper-date-picker>
+      <paper-date-picker id="picker" locale="[[locale]]" min-date="[[_computeMinDate(minDate)]]" max-date="[[_computeMaxDate(maxDate)]]"></paper-date-picker>
       <div class="buttons">
         <paper-button dialog-dismiss on-tap="_onTapClearValue" class="btn-clear">Clear</paper-button>
         <paper-button dialog-dismiss>Cancel</paper-button>
@@ -194,9 +194,20 @@ Example:
        * For localization formatting.
        */
       locale: {
-        type: String
+        type: String,
+        notify: true
       },
       
+      minDate: {
+        type: Date,
+        notify: true
+      },
+ 
+      maxDate: {
+        type: Date,
+        notify: true
+      },
+
       keyEventTarget: {
         type: Object,
         value: function() {
@@ -216,6 +227,22 @@ Example:
 
     get _inputElement() {
       return this.$.input;
+    },
+
+    _computeMinDate: function (minDate) {
+      if (minDate) {
+        return minDate;
+      }
+
+      return null;
+    },
+
+    _computeMaxDate: function (maxDate) {
+      if (maxDate) {
+        return maxDate;
+      }
+
+      return null;
     },
 
     listeners: {
