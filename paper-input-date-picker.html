@@ -218,6 +218,12 @@ Example:
       value: {
         type: Date,
         notify: true
+      },
+        
+      inputDisplayFormat: {
+        type: String,
+        value: 'LL',
+        notify: true
       }
     },
 
@@ -308,7 +314,7 @@ Example:
         return '';
       }
 
-      return this.$picker.dateFormat(value, 'LL');
+      return this.$picker.dateFormat(value, this.inputDisplayFormat);
     },
 
     _dismissDialog: function(event) {
